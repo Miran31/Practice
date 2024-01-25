@@ -1,0 +1,31 @@
+﻿@model Category
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Category list </h1>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="form-control">
+                        <div>
+                            <input class="form-control" type="text" asp-for="Name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="number" asp-for="DisplayOrder" />
+                            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                        </div>
+                        <button class="btn" type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

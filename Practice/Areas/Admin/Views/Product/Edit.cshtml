@@ -1,0 +1,55 @@
+﻿@model Product
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Update Product </h1>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="form-control">
+                        <div>
+                            <input class="form-control" type="text" placeholder="title" asp-for="Title" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="text" placeholder="description" asp-for="Description" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="text" placeholder="isbn" asp-for="ISBN" />
+                            <span asp-validation-for="ISBN" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="text" placeholder="author" asp-for="Author" />
+                            <span asp-validation-for="Author" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="number" placeholder="listprice" asp-for="ListPrice" />
+                            <span asp-validation-for="ListPrice" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="number" placeholder="price" asp-for="Price" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="number" placeholder="price50" asp-for="Price50" />
+                            <span asp-validation-for="Price50" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input class="form-control" type="number" placeholder="price100" asp-for="Price100" />
+                            <span asp-validation-for="Price100" class="text-danger"></span>
+                        </div>
+                        <button class="btn" type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
