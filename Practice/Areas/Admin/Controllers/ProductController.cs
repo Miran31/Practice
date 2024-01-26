@@ -1,32 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol;
 using Practice.Data;
 using Practice.Models;
-
+using Practice.Repository.IRepository;
+using Practice.ViewModel;
 namespace Practice.Areas.Admin.Controllers
 {
 
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public ProductController(ApplicationDbContext dbContext)
+        private readonly IProductRepository _productRepository;
+        public ProductController(IProductRepository productRepository)
         {
-            _db = dbContext;
+            _productRepository = productRepository;
         }
         public IActionResult Index()
         {
-            var categorylist = _db.Products.ToList();
+            var categorylist = _productRepository.GetAll();
             return View(categorylist);
         }
         public IActionResult Delete(int id)
         {
-            Product? categorydb = _db.Products.Find(id);
+            Product? categorydb = _productRepository.Get(u=>u.Id==id);
             if (categorydb == null)
             {
                 return NotFound();
             }
-            _db.Products.Remove(categorydb);
-            _db.SaveChanges();
+            _productRepository.Remove(categorydb);
+            _productRepository.Save();
             return RedirectToAction("Index");
         }
         public IActionResult Create()
@@ -36,13 +39,17 @@ namespace Practice.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Product obj)
         {
-            _db.Products.Add(obj);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _productRepository.Add(obj);
+                _productRepository.Save();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
         }
         public IActionResult Edit(int id)
         {
-            Product? categoryfdb = _db.Products.Find(id);
+            Product? categoryfdb = _productRepository.Get(u => u.Id == id);
             if (categoryfdb == null)
             {
                 return NotFound();
@@ -54,8 +61,8 @@ namespace Practice.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Products.Update(obj);
-                _db.SaveChanges();
+                _productRepository.Update(obj);
+                _productRepository.Save();
                 return RedirectToAction("Index");
             }
             return View();

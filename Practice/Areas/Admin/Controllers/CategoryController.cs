@@ -2,31 +2,32 @@
 using NuGet.Protocol;
 using Practice.Data;
 using Practice.Models;
+using Practice.Repository.IRepository;
 
 namespace Practice.Areas.Admin.Controllers
 {
 
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext dbContext)
+        private readonly ICategoryRepository _productRepository;
+        public CategoryController(ICategoryRepository productRepository)
         {
-            _db = dbContext;
+            _productRepository = productRepository;
         }
         public IActionResult Index()
         {
-            var categorylist = _db.Categories.ToList();
+            var categorylist = _productRepository.GetAll();
             return View(categorylist);
         }
         public IActionResult Delete(int id)
         {
-            Category? categorydb = _db.Categories.Find(id);
+            Category? categorydb = _productRepository.Get(u => u.Id == id);
             if (categorydb == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(categorydb);
-            _db.SaveChanges();
+            _productRepository.Remove(categorydb);
+            _productRepository.Save();
             return RedirectToAction("Index");
         }
         public IActionResult Create()
@@ -36,13 +37,13 @@ namespace Practice.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Category obj)
         {
-            _db.Categories.Add(obj);
-            _db.SaveChanges();
+            _productRepository.Add(obj);
+            _productRepository.Save();
             return RedirectToAction("Index");
         }
         public IActionResult Edit(int id)
         {
-            Category? categoryfdb = _db.Categories.Find(id);
+            Category? categoryfdb = _productRepository.Get(u => u.Id == id);
             if (categoryfdb == null)
             {
                 return NotFound();
@@ -54,8 +55,8 @@ namespace Practice.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _productRepository.Update(obj);
+                _productRepository.Save();
                 return RedirectToAction("Index");
             }
             return View();
